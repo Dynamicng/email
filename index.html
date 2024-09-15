@@ -227,7 +227,7 @@
         <!-- Email Extraction -->
         <div class="section email-section">
             <div class="section-title">Email Extraction</div>
-            <p class="description">Upload a text file or paste text directly to extract emails. Click the button to start extraction.</p>
+            <p class="description">Upload a file or paste text directly to extract emails. Click the button to start extraction.</p>
             <input type="file" id="fileInputEmails" />
             <textarea id="inputTextEmails" placeholder="Or paste your text here..."></textarea>
             <button onclick="extractEmails()">Extract Emails</button>
@@ -260,7 +260,7 @@
         <!-- URL Extraction -->
         <div class="section url-section">
             <div class="section-title">URL Extraction</div>
-            <p class="description">Upload a text file containing URLs, or paste text directly to extract URLs. Click the button to start extraction.</p>
+            <p class="description">Upload a file containing URLs, or paste text directly to extract URLs. Click the button to start extraction.</p>
             <input type="file" id="fileInputUrls" />
             <textarea id="inputTextUrls" placeholder="Or paste your text here..."></textarea>
             <button onclick="extractUrls()">Extract URLs</button>
@@ -293,10 +293,40 @@
 
     <script>
         // JavaScript functions for handling email extraction, URL extraction, and shuffling.
-        function extractEmails() {
-            const text = document.getElementById('inputTextEmails').value;
+
+        function handleFile(fileInputId, callback) {
+            const fileInput = document.getElementById(fileInputId);
+            const file = fileInput.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+                    callback(event.target.result);
+                };
+
+                reader.readAsText(file);
+            }
+        }
+
+        function extractEmailsFromText(text) {
             const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
-            const emails = text.match(emailPattern);
+            return text.match(emailPattern) || [];
+        }
+
+        function extractEmails() {
+            let text = document.getElementById('inputTextEmails').value;
+            handleFile('fileInputEmails', fileText => {
+                text += '\n' + fileText;
+                processEmails(text);
+            });
+
+            processEmails(text);
+        }
+
+        function processEmails(text) {
+            const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+            const emails = text.match(emailPattern) || [];
 
             const gmailEmails = [];
             const domainEmails = [];
@@ -328,7 +358,16 @@
         }
 
         function extractUrls() {
-            const text = document.getElementById('inputTextUrls').value;
+            let text = document.getElementById('inputTextUrls').value;
+            handleFile('fileInputUrls', fileText => {
+                text += '\n' + fileText;
+                processUrls(text);
+            });
+
+            processUrls(text);
+        }
+
+        function processUrls(text) {
             const urlPattern = /https?:\/\/[^\s]+/g;
             const urls = text.match(urlPattern) || [];
 
