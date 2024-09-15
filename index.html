@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mythical Tools</title>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'MedievalSharp', cursive;
+            background: linear-gradient(to right, #a2c2e8, #f4c2c2);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        header, footer {
+            width: 100%;
+            padding: 20px;
+            background: #6c5b7b;
+            color: #fff;
+            text-align: center;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 900px;
+            margin: 20px auto;
+            flex-grow: 1; /* Allows container to grow and fill remaining space */
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 26px;
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        .description {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        input[type="file"], textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 200px;
+        }
+
+        textarea.readonly {
+            background: #f9f9f9;
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #6c5b7b;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            box-sizing: border-box;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #4a3c5f;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .result-area {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: #fafafa;
+        }
+
+        .result-area span {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        footer {
+            margin-top: 30px;
+        }
+
+        footer a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            textarea {
+                height: 160px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Dynamic Sales Agency Email Tools</h1>
+    </header>
+
+    <div class="container">
+        <!-- Email Extraction -->
+        <div class="section email-section">
+            <div class="section-title">Email Extraction</div>
+            <p class="description">Upload a text file or paste text directly to extract emails. Click the button to start extraction.</p>
+            <input type="file" id="fileInputEmails" />
+            <textarea id="inputTextEmails" placeholder="Or paste your text here..."></textarea>
+            <button onclick="extractEmails()">Extract Emails</button>
+            <div class="result-area">
+                <span id="gmailCount">Gmail Emails (0):</span>
+                <textarea id="gmailEmails" class="readonly" placeholder="Gmail emails will appear here..."></textarea>
+                <button onclick="clearTextArea('gmailEmails')">Clear Gmail Emails</button>
+                <button onclick="downloadTextFile('gmailEmails', 'gmail_emails.txt')">Download Gmail Emails</button>
+            </div>
+            <div class="result-area">
+                <span id="domainCount">Domain Emails (0):</span>
+                <textarea id="domainEmails" class="readonly" placeholder="Domain emails will appear here..."></textarea>
+                <button onclick="clearTextArea('domainEmails')">Clear Domain Emails</button>
+                <button onclick="downloadTextFile('domainEmails', 'domain_emails.txt')">Download Domain Emails</button>
+            </div>
+            <div class="result-area">
+                <span id="domainUrlsCount">Domain URLs (0):</span>
+                <textarea id="domainUrls" class="readonly" placeholder="Domain URLs will appear here..."></textarea>
+                <button onclick="clearTextArea('domainUrls')">Clear Domain URLs</button>
+                <button onclick="downloadTextFile('domainUrls', 'domain_urls.txt')">Download Domain URLs</button>
+            </div>
+            <div class="result-area">
+                <span id="domainNamesCount">Domain Names (0):</span>
+                <textarea id="domainNames" class="readonly" placeholder="Domain names will appear here..."></textarea>
+                <button onclick="clearTextArea('domainNames')">Clear Domain Names</button>
+                <button onclick="downloadTextFile('domainNames', 'domain_names.txt')">Download Domain Names</button>
+            </div>
+        </div>
+
+        <!-- URL Extraction -->
+        <div class="section url-section">
+            <div class="section-title">URL Extraction</div>
+            <p class="description">Upload a text file containing URLs, or paste text directly to extract URLs. Click the button to start extraction.</p>
+            <input type="file" id="fileInputUrls" />
+            <textarea id="inputTextUrls" placeholder="Or paste your text here..."></textarea>
+            <button onclick="extractUrls()">Extract URLs</button>
+            <div class="result-area">
+                <span id="urlCount">Extracted URLs (0):</span>
+                <textarea id="extractedUrls" class="readonly" placeholder="Extracted URLs will appear here..."></textarea>
+                <button onclick="clearTextArea('extractedUrls')">Clear Extracted URLs</button>
+                <button onclick="downloadTextFile('extractedUrls', 'extracted_urls.txt')">Download Extracted URLs</button>
+            </div>
+        </div>
+
+        <!-- Email Shuffle -->
+        <div class="section shuffle-section">
+            <div class="section-title">Email Shuffle</div>
+            <p class="description">Upload a text file containing emails, or paste text directly to shuffle the email addresses. Click the button to start shuffling.</p>
+            <input type="file" id="fileInputShuffle" />
+            <textarea id="inputTextShuffle" placeholder="Or paste your text here..."></textarea>
+            <button onclick="shuffleEmails()">Shuffle Emails</button>
+            <div class="result-area">
+                <span id="shuffledEmailsCount">Shuffled Emails (0):</span>
+                <textarea id="shuffledEmails" class="readonly" placeholder="Shuffled emails will appear here..."></textarea>
+                <button onclick="clearTextArea('shuffledEmails')">Clear Shuffled Emails</button>
+                <button onclick="downloadTextFile('shuffledEmails', 'shuffled_emails.txt')">Download Shuffled Emails</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Mythical Tools. All rights reserved. <a href="https://dynamicsalesagency.com.ng" target="_blank">Visit our portfolio website</a></p>
+    </footer>
+
+    <script>
+        function processFile(inputId, textareaId, action) {
+            const file = document.getElementById(inputId).files[0];
+            const textarea = document.getElementById(textareaId);
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    textarea.value = e.target.result;
+                    action();
+                };
+                reader.readAsText(file);
+            } else {
+                action();
+            }
+        }
+
+        function extractEmails() {
+            processFile('fileInputEmails', 'inputTextEmails', () => {
+                const text = document.getElementById('inputTextEmails').value;
+                const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+                const emails = text.match(emailPattern);
+
+                const gmailEmails = [];
+                const domainEmails = [];
+                const domainUrls = [];
+                const domainNames = [];
+
+                if (emails !== null) {
+                    emails.forEach(email => {
+                        if (email.endsWith('@gmail.com')) {
+                            gmailEmails.push(email);
+                        } else {
+                            domainEmails.push(email);
+                            const domain = email.split('@')[1];
+                            domainUrls.push(`http://${domain}`);
+                            domainNames.push(domain);
+                        }
+                    });
+                }
+
+                document.getElementById('gmailCount').textContent = `Gmail Emails (${gmailEmails.length}):`;
+                document.getElementById('domainCount').textContent = `Domain Emails (${domainEmails.length}):`;
+                document.getElementById('domainUrlsCount').textContent = `Domain URLs (${domainUrls.length}):`;
+                document.getElementById('domainNamesCount').textContent = `Domain Names (${domainNames.length}):`;
+
+                document.getElementById('gmailEmails').value = gmailEmails.join('\n') || 'No Gmail emails found.';
+                document.getElementById('domainEmails').value = domainEmails.join('\n') || 'No domain emails found.';
+                document.getElementById('domainUrls').value = domainUrls.join('\n') || 'No domain URLs found.';
+                document.getElementById('domainNames').value = domainNames.join('\n') || 'No domain names found.';
+            });
+        }
+
+        function extractUrls() {
+            processFile('fileInputUrls', 'inputTextUrls', () => {
+                const text = document.getElementById('inputTextUrls').value;
+                const urlPattern = /https?:\/\/[^\s]+/g;
+                const urls = text.match(urlPattern) || [];
+
+                document.getElementById('urlCount').textContent = `Extracted URLs (${urls.length}):`;
+                document.getElementById('extractedUrls').value = urls.join('\n') || 'No URLs found.';
+            });
+        }
+
+        function shuffleEmails() {
+            processFile('fileInputShuffle', 'inputTextShuffle', () => {
+                const text = document.getElementById('inputTextShuffle').value;
+                const emails = text.split('\n').filter(email => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email));
+
+                for (let i = emails.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [emails[i], emails[j]] = [emails[j], emails[i]];
+                }
+
+                document.getElementById('shuffledEmailsCount').textContent = `Shuffled Emails (${emails.length}):`;
+                document.getElementById('shuffledEmails').value = emails.join('\n') || 'No emails to shuffle.';
+            });
+        }
+
+        function clearTextArea(id) {
+            document.getElementById(id).value = '';
+        }
+
+        function downloadTextFile(textareaId, filename) {
+            const text = document.getElementById(textareaId).value;
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+        }
+
+        document.querySelectorAll('textarea.readonly').forEach(textarea => {
+            textarea.addEventListener('click', function() {
+                this.select();
+                document.execCommand('copy');
+                alert('Copied to clipboard!');
+            });
+        });
+    </script>
+</body>
+</html>
