@@ -6,216 +6,244 @@
     <title>Dynamic Sales Email & URL Extractor</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            overflow-x: hidden; /* Prevent horizontal scrolling */
-        }
+:root {
+    --background-color: #ffffff;
+    --button-bg: #003366;
+    --button-text: #ffffff;
+}
 
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: #ffffff; /* Plain white background */
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    overflow-y: auto; /* Handle vertical scrolling gracefully */
+    background-color: var(--background-color);
+    color: #333;
+    font-family: 'Roboto', sans-serif;
+    min-height: 100vh;
+}
 
-        .header {
-            width: 100%;
-            padding: 20px;
-            background: #003366;
-            color: #fff;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            box-sizing: border-box;
-            margin-bottom: 20px; /* Space between header and content */
-        }
+body {
+    display: flex;
+    flex-direction: column;
+}
 
-        .container {
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            margin: 0 auto;
-            max-width: 960px; /* Maximum width for larger screens */
-            width: 90%; /* Responsive width */
-            box-sizing: border-box;
-        }
 
-        h1 {
-            font-size: 24px;
-            margin-bottom: 15px;
-            color: #003366;
-        }
 
-        .section {
-            margin-bottom: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            background: #f8f8f8;
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+button {
+    width: auto; /* Allow button width to adjust based on content */
+    padding: 8px 16px; /* Smaller padding */
+    background-color: var(--button-bg);
+    border: 1px solid transparent; /* Border removed, add border only on hover */
+    color: var(--button-text);
+    font-size: 14px; /* Smaller font size */
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    box-sizing: border-box;
+    transition: background-color 0.3s, transform 0.2s, border 0.3s;
+    text-align: center; /* Center text in button */
+}
 
-        .section-title {
-            font-size: 18px;
-            margin-bottom: 10px;
-            color: #003366;
-        }
+button:hover {
+    background-color: #002244;
+    border: 1px solid #001122; /* Add border on hover */
+}
 
-        .description {
-            margin-bottom: 10px;
-            color: #666;
-        }
+button:active {
+    transform: scale(0.98);
+}
 
-        input[type="file"], textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-        }
 
-        textarea {
-            resize: vertical;
-            height: 120px;
-        }
 
-        textarea.readonly {
-            background: #f4f4f4;
-            cursor: pointer;
-        }
 
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #003366;
-            border: none;
-            color: #fff;
-            font-size: 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 10px;
-            box-sizing: border-box;
-            transition: background-color 0.3s, transform 0.2s;
-        }
+.header {
+    width: 100%;
+    padding: 20px;
+    background: var(--button-bg);
+    color: var(--button-text);
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
 
-        button:hover {
-            background-color: #002244;
-        }
+.container {
+    margin: 0 auto;
+    max-width: 960px;
+    width: 90%;
+    box-sizing: border-box;
+}
 
-        button:active {
-            transform: scale(0.98);
-        }
+.section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-        .result-area {
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            padding: 10px;
-            background: #fafafa;
-            overflow-y: auto; /* Add scroll to result areas if content overflows */
-            max-height: 200px; /* Limit height to maintain layout */
-        }
+.section-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: var(--button-bg);
+}
 
-        .result-area span {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #333;
-        }
+.description {
+    margin-bottom: 10px;
+    color: #666;
+}
 
-        footer {
-            width: 100%;
-            padding: 15px;
-            background: #003366;
-            color: #fff;
-            text-align: center;
-            box-sizing: border-box;
-            margin-top: 20px;
-        }
+input[type="file"], textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
 
-        footer a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-        }
+textarea {
+    resize: vertical;
+    height: 120px;
+}
 
-        footer a:hover {
-            text-decoration: underline;
-        }
+textarea.readonly {
+    background: #f4f4f4;
+    cursor: pointer;
+}
 
-        /* Custom Scrollbar Styles */
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--button-bg);
+    border: none;
+    color: var(--button-text);
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    box-sizing: border-box;
+    transition: background-color 0.3s, transform 0.2s;
+}
 
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
+button:hover {
+    background-color: #002244;
+}
 
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 10px;
-        }
+button:active {
+    transform: scale(0.98);
+}
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
+.result-area {
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+    background: #fafafa;
+    max-height: 300px; /* Increased max-height */
+    overflow-y: auto;
+}
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-                max-width: 720px; /* Reduced width for tablets */
-            }
+.result-area span {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
 
-            h1 {
-                font-size: 20px;
-            }
+footer {
+    width: 100%;
+    padding: 15px;
+    background: var(--button-bg);
+    color: var(--button-text);
+    text-align: center;
+    box-sizing: border-box;
+    margin-top: 20px;
+}
 
-            .section-title {
-                font-size: 16px;
-            }
+footer a {
+    color: var(--button-text);
+    text-decoration: none;
+    font-weight: bold;
+}
 
-            button {
-                font-size: 12px;
-                padding: 10px;
-            }
+footer a:hover {
+    text-decoration: underline;
+}
 
-            textarea {
-                height: 100px;
-            }
-        }
+.color-picker-section {
+    width: 100%; /* Full width */
+    padding: 15px;
+    box-sizing: border-box;
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 20px;
+}
 
-        @media (max-width: 480px) {
-            .container {
-                padding: 10px;
-                max-width: 100%; /* Full width on very small screens */
-            }
+.color-picker-section h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: var(--button-bg);
+}
 
-            h1 {
-                font-size: 18px;
-            }
+.color-picker-section input[type="color"] {
+    width: 100%;
+    height: 40px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
 
-            .section-title {
-                font-size: 14px;
-            }
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+        max-width: 100%;
+    }
 
-            button {
-                font-size: 10px;
-                padding: 8px;
-            }
+    .color-picker-section {
+        padding: 10px;
+        margin-top: 10px;
+    }
 
-            textarea {
-                height: 80px;
-            }
-        }
+    .color-picker-section h2 {
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+
+    .color-picker-section input[type="color"] {
+        height: 35px;
+        margin-bottom: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .color-picker-section {
+        padding: 8px;
+        margin-top: 5px;
+    }
+
+    .color-picker-section h2 {
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+
+    .color-picker-section input[type="color"] {
+        height: 30px;
+        margin-bottom: 5px;
+    }
+
+    button {
+        font-size: 12px;
+        padding: 10px;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -223,7 +251,25 @@
         Dynamic Sales Email & URL Extractor
     </div>
 
+    <div class="color-picker-container">
+        <h2>Customize Colors</h2>
+        <label for="backgroundColorPicker">Background Color:</label>
+        <input type="color" id="backgroundColorPicker" value="#ffffff" onchange="updateColorScheme()">
+        <label for="buttonColorPicker">Button Color:</label>
+        <input type="color" id="buttonColorPicker" value="#003366" onchange="updateColorScheme()">
+        <button onclick="savePreferences()">Save Preferences</button>
+    </div>
+
     <div class="container">
+        <!-- Analysis Dashboard -->
+        <div class="analysis-container">
+            <h2>Analysis Dashboard</h2>
+            <p id="buttonClicks">Buttons Clicked: 0</p>
+            <p id="fileUploads">Files Uploaded: 0</p>
+            <p id="textEntries">Text Entries: 0</p>
+            <p id="errorsOccurred">Errors Occurred: 0</p>
+        </div>
+
         <!-- Email Extraction -->
         <div class="section email-section">
             <div class="section-title">Email Extraction</div>
@@ -236,24 +282,32 @@
                 <textarea id="gmailEmails" class="readonly" placeholder="Gmail emails will appear here..."></textarea>
                 <button onclick="clearTextArea('gmailEmails')">Clear Gmail Emails</button>
                 <button onclick="downloadTextFile('gmailEmails', 'gmail_emails.txt')">Download Gmail Emails</button>
+                <button onclick="exportToCSV('gmailEmails', 'gmail_emails.csv')">Export Gmail Emails to CSV</button>
+                <input type="text" id="searchGmail" placeholder="Search Gmail Emails..." oninput="searchResults('gmailEmails', 'searchGmail')">
             </div>
             <div class="result-area">
                 <span id="domainCount">Domain Emails (0):</span>
                 <textarea id="domainEmails" class="readonly" placeholder="Domain emails will appear here..."></textarea>
                 <button onclick="clearTextArea('domainEmails')">Clear Domain Emails</button>
                 <button onclick="downloadTextFile('domainEmails', 'domain_emails.txt')">Download Domain Emails</button>
+                <button onclick="exportToCSV('domainEmails', 'domain_emails.csv')">Export Domain Emails to CSV</button>
+                <input type="text" id="searchDomain" placeholder="Search Domain Emails..." oninput="searchResults('domainEmails', 'searchDomain')">
             </div>
             <div class="result-area">
                 <span id="domainUrlsCount">Domain URLs (0):</span>
                 <textarea id="domainUrls" class="readonly" placeholder="Domain URLs will appear here..."></textarea>
                 <button onclick="clearTextArea('domainUrls')">Clear Domain URLs</button>
                 <button onclick="downloadTextFile('domainUrls', 'domain_urls.txt')">Download Domain URLs</button>
+                <button onclick="exportToCSV('domainUrls', 'domain_urls.csv')">Export Domain URLs to CSV</button>
+                <input type="text" id="searchUrls" placeholder="Search Domain URLs..." oninput="searchResults('domainUrls', 'searchUrls')">
             </div>
             <div class="result-area">
                 <span id="domainNamesCount">Domain Names (0):</span>
                 <textarea id="domainNames" class="readonly" placeholder="Domain names will appear here..."></textarea>
                 <button onclick="clearTextArea('domainNames')">Clear Domain Names</button>
                 <button onclick="downloadTextFile('domainNames', 'domain_names.txt')">Download Domain Names</button>
+                <button onclick="exportToCSV('domainNames', 'domain_names.csv')">Export Domain Names to CSV</button>
+                <input type="text" id="searchNames" placeholder="Search Domain Names..." oninput="searchResults('domainNames', 'searchNames')">
             </div>
         </div>
 
@@ -269,6 +323,8 @@
                 <textarea id="extractedUrls" class="readonly" placeholder="Extracted URLs will appear here..."></textarea>
                 <button onclick="clearTextArea('extractedUrls')">Clear Extracted URLs</button>
                 <button onclick="downloadTextFile('extractedUrls', 'extracted_urls.txt')">Download Extracted URLs</button>
+                <button onclick="exportToCSV('extractedUrls', 'extracted_urls.csv')">Export Extracted URLs to CSV</button>
+                <input type="text" id="searchUrlsExtracted" placeholder="Search Extracted URLs..." oninput="searchResults('extractedUrls', 'searchUrlsExtracted')">
             </div>
         </div>
 
@@ -283,6 +339,25 @@
                 <textarea id="shuffledEmails" class="readonly" placeholder="Shuffled emails will appear here..."></textarea>
                 <button onclick="clearTextArea('shuffledEmails')">Clear Shuffled Emails</button>
                 <button onclick="downloadTextFile('shuffledEmails', 'shuffled_emails.txt')">Download Shuffled Emails</button>
+                <button onclick="exportToCSV('shuffledEmails', 'shuffled_emails.csv')">Export Shuffled Emails to CSV</button>
+                <input type="text" id="searchShuffled" placeholder="Search Shuffled Emails..." oninput="searchResults('shuffledEmails', 'searchShuffled')">
+            </div>
+        </div>
+
+        <!-- Remove Duplicates -->
+        <div class="section remove-duplicates-section">
+            <div class="section-title">Remove Duplicates</div>
+            <p class="description">Paste data into the field below to remove duplicates and count them. Click the button to process.</p>
+            <textarea id="inputTextRemoveDuplicates" placeholder="Paste text here..."></textarea>
+            <button onclick="removeDuplicates()">Remove Duplicates</button>
+            <div class="result-area">
+                <span id="uniqueCount">Unique Entries (0):</span>
+                <textarea id="uniqueEntries" class="readonly" placeholder="Unique entries will appear here..."></textarea>
+                <button onclick="clearTextArea('uniqueEntries')">Clear Unique Entries</button>
+                <button onclick="downloadTextFile('uniqueEntries', 'unique_entries.txt')">Download Unique Entries</button>
+                <button onclick="exportToCSV('uniqueEntries', 'unique_entries.csv')">Export Unique Entries to CSV</button>
+                <p id="duplicateCount">Duplicates Found: 0</p>
+                <input type="text" id="searchUnique" placeholder="Search Unique Entries..." oninput="searchResults('uniqueEntries', 'searchUnique')">
             </div>
         </div>
     </div>
@@ -292,9 +367,33 @@
     </footer>
 
     <script>
-        // JavaScript functions for handling email extraction, URL extraction, and shuffling.
+        let buttonClicks = 0;
+        let fileUploads = 0;
+        let textEntries = 0;
+        let errorsOccurred = 0;
+
+        function incrementButtonClicks() {
+            buttonClicks++;
+            document.getElementById('buttonClicks').textContent = `Buttons Clicked: ${buttonClicks}`;
+        }
+
+        function incrementFileUploads() {
+            fileUploads++;
+            document.getElementById('fileUploads').textContent = `Files Uploaded: ${fileUploads}`;
+        }
+
+        function incrementTextEntries() {
+            textEntries++;
+            document.getElementById('textEntries').textContent = `Text Entries: ${textEntries}`;
+        }
+
+        function incrementErrorsOccurred() {
+            errorsOccurred++;
+            document.getElementById('errorsOccurred').textContent = `Errors Occurred: ${errorsOccurred}`;
+        }
 
         function handleFile(fileInputId, callback) {
+            incrementFileUploads();
             const fileInput = document.getElementById(fileInputId);
             const file = fileInput.files[0];
 
@@ -306,6 +405,8 @@
                 };
 
                 reader.readAsText(file);
+            } else {
+                incrementErrorsOccurred();
             }
         }
 
@@ -315,6 +416,7 @@
         }
 
         function extractEmails() {
+            incrementTextEntries();
             let text = document.getElementById('inputTextEmails').value;
             handleFile('fileInputEmails', fileText => {
                 text += '\n' + fileText;
@@ -358,6 +460,7 @@
         }
 
         function extractUrls() {
+            incrementTextEntries();
             let text = document.getElementById('inputTextUrls').value;
             handleFile('fileInputUrls', fileText => {
                 text += '\n' + fileText;
@@ -376,33 +479,95 @@
         }
 
         function shuffleEmails() {
+            incrementTextEntries();
             const text = document.getElementById('inputTextShuffle').value;
-            const emails = text.split('\n').filter(email => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email));
+            const emails = text.split('\n').filter(email => email.trim() !== '');
+            const shuffledEmails = emails.sort(() => Math.random() - 0.5);
 
-            for (let i = emails.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [emails[i], emails[j]] = [emails[j], emails[i]];
-            }
-
-            document.getElementById('shuffledEmailCount').textContent = `Shuffled Emails (${emails.length}):`;
-            document.getElementById('shuffledEmails').value = emails.join('\n') || 'No emails to shuffle.';
+            document.getElementById('shuffledEmailCount').textContent = `Shuffled Emails (${shuffledEmails.length}):`;
+            document.getElementById('shuffledEmails').value = shuffledEmails.join('\n') || 'No emails to shuffle.';
         }
 
-        function clearTextArea(id) {
-            document.getElementById(id).value = '';
+        function removeDuplicates() {
+            incrementTextEntries();
+            const text = document.getElementById('inputTextRemoveDuplicates').value;
+            const entries = text.split('\n').filter(entry => entry.trim() !== '');
+            const uniqueEntries = [...new Set(entries)];
+            const duplicatesCount = entries.length - uniqueEntries.length;
+
+            document.getElementById('uniqueCount').textContent = `Unique Entries (${uniqueEntries.length}):`;
+            document.getElementById('uniqueEntries').value = uniqueEntries.join('\n') || 'No entries to process.';
+            document.getElementById('duplicateCount').textContent = `Duplicates Found: ${duplicatesCount}`;
         }
 
-        function downloadTextFile(textareaId, filename) {
-            const text = document.getElementById(textareaId).value;
-            const blob = new Blob([text], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+        function downloadTextFile(textAreaId, filename) {
+            const text = document.getElementById(textAreaId).value;
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
         }
+
+        function exportToCSV(textAreaId, filename) {
+            const text = document.getElementById(textAreaId).value;
+            const csv = text.split('\n').map(row => `"${row.replace(/"/g, '""')}"`).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+        }
+
+        function clearTextArea(textAreaId) {
+            document.getElementById(textAreaId).value = '';
+        }
+
+        function searchResults(textAreaId, searchInputId) {
+            const searchText = document.getElementById(searchInputId).value.toLowerCase();
+            const textArea = document.getElementById(textAreaId);
+            const lines = textArea.value.split('\n');
+            const filteredLines = lines.filter(line => line.toLowerCase().includes(searchText));
+            textArea.value = filteredLines.join('\n');
+        }
+
+        function updateColorScheme() {
+            const backgroundColor = document.getElementById('backgroundColorPicker').value;
+            const buttonColor = document.getElementById('buttonColorPicker').value;
+
+            document.documentElement.style.setProperty('--background-color', backgroundColor);
+            document.documentElement.style.setProperty('--button-bg', buttonColor);
+            document.documentElement.style.setProperty('--button-text', invertColor(buttonColor));
+        }
+
+        function invertColor(hex) {
+            let r = parseInt(hex.slice(1, 3), 16);
+            let g = parseInt(hex.slice(3, 5), 16);
+            let b = parseInt(hex.slice(5, 7), 16);
+
+            r = 255 - r;
+            g = 255 - g;
+            b = 255 - b;
+
+            return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+        }
+
+        function savePreferences() {
+            const backgroundColor = document.getElementById('backgroundColorPicker').value;
+            const buttonColor = document.getElementById('buttonColorPicker').value;
+            localStorage.setItem('backgroundColor', backgroundColor);
+            localStorage.setItem('buttonColor', buttonColor);
+        }
+
+        function loadPreferences() {
+            const backgroundColor = localStorage.getItem('backgroundColor') || '#ffffff';
+            const buttonColor = localStorage.getItem('buttonColor') || '#003366';
+            document.getElementById('backgroundColorPicker').value = backgroundColor;
+            document.getElementById('buttonColorPicker').value = buttonColor;
+            updateColorScheme();
+        }
+
+        window.onload = loadPreferences;
     </script>
 </body>
 </html>
